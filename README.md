@@ -36,8 +36,19 @@ or label some prexisting nodes
         
         
         
- ## Modify default IngressController
- 
+
+## Modify default IngressController
+    oc edit ingresscontrollers.operator.openshift.io -n openshift-ingress-operator default
+    
+    ...
+    spec:
+      namespaceSelector:
+        matchExpressions:
+         - key: securityzone
+           operator: DoesNotExist
+    ...
+
+
  ## Namespace
  
     apiVersion: v1

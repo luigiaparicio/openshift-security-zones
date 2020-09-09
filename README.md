@@ -20,7 +20,7 @@ or label some prexisting nodes
     spec:
       endpointPublishingStrategy:
         type: HostNetwork
-      domain: srvapps.ocplab.tcloud.telefonica.com.ar
+      domain: some-other-apps.ocp-cluster.example.com
       replicas: 2
       nodePlacement:
         nodeSelector:

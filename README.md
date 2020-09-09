@@ -32,7 +32,7 @@ or label some prexisting nodes
           - key: srv-ingress
             operator: In
             values:
-            - secure
+            - true
         
         
         
@@ -54,9 +54,9 @@ or label some prexisting nodes
     apiVersion: v1
     kind: Namespace
     metadata:
-      name: test-srv
+      name: test-srv-app
       labels:
-        srv-ingress: secure
+        srv-ingress: true
  
 
 ## App
@@ -64,7 +64,7 @@ or label some prexisting nodes
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      namespace: test-srv
+      namespace: test-srv-app
       name: test-srv-app
       labels:
         app: test-srv-app
@@ -84,7 +84,7 @@ or label some prexisting nodes
           tolerations:
             - key: "srv-ingress"
               operator: "Equal"
-              value: "secure"
+              value: "true"
               effect: "NoSchedule"
           nodeSelector:
             srv-node: 'true'
@@ -96,7 +96,7 @@ or label some prexisting nodes
     kind: Service
     metadata:
       name: test-srv-app
-      namespace: test-srv
+      namespace: test-srv-app
     spec:
       selector:
         app: test-srv-app
@@ -109,4 +109,15 @@ or label some prexisting nodes
 
 
 ## Route
-    oc expose svc test-srv-app -n test-srv
+    kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      name: test-srv-app
+      namespace: test-srv-app
+    spec:
+      host: hello.some-other-apps.ocp-cluster.example.com
+      to:
+        kind: Service
+        name: test-srv-app
+      port:
+        targetPort: 8080-tcp

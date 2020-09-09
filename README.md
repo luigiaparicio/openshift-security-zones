@@ -6,7 +6,7 @@ Openshift Nodes for specific Security Network Zones
 Create a new MachineSet for provisioning new Nodes
 <wip>
   
-Or Label some prexisting nodes
+or label some prexisting nodes
 
     oc label <NODE> srv-node=true ingressaccess=true
 
@@ -40,8 +40,62 @@ Or Label some prexisting nodes
  
  ## Namespace
  
- ## App
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: test-srv
+      labels:
+        srv-ingress: secure
  
- ## Service
- 
- ## Route
+
+## App
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      namespace: test-srv
+      name: test-srv-app
+      labels:
+        app: test-srv-app
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: test-srv-app
+      template:
+        metadata:
+          labels:
+            app: test-srv-app
+        spec:
+          containers:
+          - name: test-srv-app
+            image: gcr.io/google-samples/hello-app:1.0
+          tolerations:
+            - key: "srv-ingress"
+              operator: "Equal"
+              value: "secure"
+              effect: "NoSchedule"
+          nodeSelector:
+            srv-node: 'true'
+
+
+## Service
+
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: test-srv-app
+      namespace: test-srv
+    spec:
+      selector:
+        app: test-srv-app
+      ports:
+        - name: 8080-tcp
+          protocol: TCP
+          port: 8080
+          targetPort: 8080
+
+
+
+## Route
+    oc expose svc test-srv-app -n test-srv

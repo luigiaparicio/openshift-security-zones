@@ -7,6 +7,7 @@ Create a new MachineSet for provisioning new Nodes
 <wip>
   
 Or Label some prexisting nodes
+
     oc label <NODE> srv-node=true ingressaccess=true
 
 ## New IngressController

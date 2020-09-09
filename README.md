@@ -59,7 +59,7 @@ or label some prexisting nodes
         srv-ingress: true
  
 
-## App
+## Deployment
 
     apiVersion: apps/v1
     kind: Deployment

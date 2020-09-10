@@ -121,3 +121,16 @@ or label some prexisting nodes
         name: test-srv-app
       port:
         targetPort: 8080-tcp
+        
+## Include a label in the default namespace to permit IngressController traffic
+
+Add this label _network.openshift.io/policy-group: ingress_
+
+    oc edit namespace default
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      labels:
+        network.openshift.io/policy-group: ingress
+      annotations:
+...

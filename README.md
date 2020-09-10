@@ -124,7 +124,7 @@ or label some prexisting nodes
         
 ## Include a label in the default namespace to permit IngressController traffic
 
-Because we are using HostNetwork for our new IngressController
+Because we are using HostNetwork for our new IngressController\
 Add this label _network.openshift.io/policy-group: ingress_
 
     oc edit namespace default
